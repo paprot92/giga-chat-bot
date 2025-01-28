@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F3327474-FD4E-4608-BB92-A95CF042C608}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaChatBot.Domain", "src\GigaChatBot.Domain\GigaChatBot.Domain.csproj", "{7E068429-C9B1-4226-B9C2-34230C084EF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaChatBot.Application", "src\GigaChatBot.Application\GigaChatBot.Application.csproj", "{D9E2045D-7814-454F-9276-BFCD1F7926B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaChatBot.Persistence", "src\GigaChatBot.Persistence\GigaChatBot.Persistence.csproj", "{28090C2C-14DF-4162-8A3B-039571F822DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaChatBot.Infrastructure", "src\GigaChatBot.Infrastructure\GigaChatBot.Infrastructure.csproj", "{DDCF3BE1-6B83-45CB-8C24-26E88399A83E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaChatBot.Api", "src\GigaChatBot.Api\GigaChatBot.Api.csproj", "{FF97EAD7-1DAA-4EC3-BB63-0706F12A821A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E068429-C9B1-4226-B9C2-34230C084EF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E068429-C9B1-4226-B9C2-34230C084EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E068429-C9B1-4226-B9C2-34230C084EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E068429-C9B1-4226-B9C2-34230C084EF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9E2045D-7814-454F-9276-BFCD1F7926B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9E2045D-7814-454F-9276-BFCD1F7926B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9E2045D-7814-454F-9276-BFCD1F7926B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9E2045D-7814-454F-9276-BFCD1F7926B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28090C2C-14DF-4162-8A3B-039571F822DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28090C2C-14DF-4162-8A3B-039571F822DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28090C2C-14DF-4162-8A3B-039571F822DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28090C2C-14DF-4162-8A3B-039571F822DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDCF3BE1-6B83-45CB-8C24-26E88399A83E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDCF3BE1-6B83-45CB-8C24-26E88399A83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDCF3BE1-6B83-45CB-8C24-26E88399A83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDCF3BE1-6B83-45CB-8C24-26E88399A83E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF97EAD7-1DAA-4EC3-BB63-0706F12A821A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF97EAD7-1DAA-4EC3-BB63-0706F12A821A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF97EAD7-1DAA-4EC3-BB63-0706F12A821A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF97EAD7-1DAA-4EC3-BB63-0706F12A821A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7E068429-C9B1-4226-B9C2-34230C084EF7} = {F3327474-FD4E-4608-BB92-A95CF042C608}
+		{D9E2045D-7814-454F-9276-BFCD1F7926B9} = {F3327474-FD4E-4608-BB92-A95CF042C608}
+		{28090C2C-14DF-4162-8A3B-039571F822DE} = {F3327474-FD4E-4608-BB92-A95CF042C608}
+		{DDCF3BE1-6B83-45CB-8C24-26E88399A83E} = {F3327474-FD4E-4608-BB92-A95CF042C608}
+		{FF97EAD7-1DAA-4EC3-BB63-0706F12A821A} = {F3327474-FD4E-4608-BB92-A95CF042C608}
+	EndGlobalSection
+EndGlobal
