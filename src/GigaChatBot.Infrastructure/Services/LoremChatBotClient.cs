@@ -1,73 +1,23 @@
 ﻿using GigaChatBot.Application.Common.Interfaces.Services;
-using GigaChatBot.Domain.Entities;
 using System.Runtime.CompilerServices;
-using System.Text;
+using static GigaChatBot.Infrastructure.Services.GigaChatBotResources;
 
 namespace GigaChatBot.Infrastructure.Services
 {
-    public enum ResponseType
-    {
-        Short,
-        Medium,
-        Long,
-        VeryLong
-    }
-
-    public class LoremChatBotService : IChatBotService
+    public class LoremChatBotClient : IChatBotClient
     {
         private static readonly Random _random = new();
-        private readonly IConversationRepository _conversationRepository;
-        private readonly IConversationNotificationService _notificationService;
-
-        public LoremChatBotService(IConversationRepository conversationRepository, IConversationNotificationService notificationService)
-        {
-            _conversationRepository = conversationRepository;
-            _notificationService = notificationService;
-        }
-
-        public async Task SendMessageAsync(Guid conversationId, string message, CancellationToken cancellationToken)
-        {
-            var conversation = await _conversationRepository.GetConversationAsync(conversationId);
-            if (conversation is null)
-            {
-                throw new Exception("Conversation not found.");
-            }
-
-            await _conversationRepository.AddMessageAsync(
-                new Message { ConversationId = conversationId, Content = message, CreatedOn = DateTime.Now, Type = Domain.Enums.MessageType.User });
-
-            var responseStream = GetMessageResponseStreamAsync(message, cancellationToken);
-            var responseBuilder = new StringBuilder();
-            try
-            {
-                await foreach (var chunk in responseStream.WithCancellation(cancellationToken))
-                {
-                    await _notificationService.SendConversationMessageChunk(conversationId, $" {chunk}");
-                    responseBuilder.Append($" {chunk}");
-                }
-            }
-            catch (OperationCanceledException) { }
-            catch (Exception) {
-                responseBuilder.Clear();
-                responseBuilder.Append("An error occurred during generation. Try again.");
-            }
-            finally
-            {
-                await _conversationRepository.AddMessageAsync(
-                    new Message { ConversationId = conversationId, Content = responseBuilder.ToString(), CreatedOn = DateTime.Now, Type = Domain.Enums.MessageType.Assistant });
-            }
-        }
 
         public async IAsyncEnumerable<string> GetMessageResponseStreamAsync(string userMessage, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var responseType = DrawResponseType();
-            var response = GigaChatBotResources.ResponseTypeToResponses[responseType];
+            var response = ResponseTypeToResponses[responseType];
 
             foreach (var word in response.Split(' '))
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    yield break; 
+                    yield break;
                 }
 
                 yield return word;
@@ -84,6 +34,14 @@ namespace GigaChatBot.Infrastructure.Services
 
     public static class GigaChatBotResources
     {
+        public enum ResponseType
+        {
+            Short,
+            Medium,
+            Long,
+            VeryLong
+        }
+
         public static readonly Dictionary<ResponseType, string> ResponseTypeToResponses = new()
         {
             {
