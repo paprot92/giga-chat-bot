@@ -8,7 +8,7 @@ export interface IMessage {
   content: string;
   createdOn: Date;
   type: MessageType;
-  reaction: MessageUserReaction;
+  reaction: MessageReaction;
 }
 
 export enum MessageType {
@@ -17,7 +17,7 @@ export enum MessageType {
   Assistant,
 }
 
-export enum MessageUserReaction {
+export enum MessageReaction {
   None,
   Like,
   Dislike,

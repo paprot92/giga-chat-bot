@@ -8,6 +8,7 @@ namespace GigaChatBot.Domain.Entities
         public string Content { get; set; } = string.Empty;
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
         public MessageType Type { get; set; }
-        public MessageUserReaction Reaction { get; set; } = MessageUserReaction.None;
+        public MessageReaction Reaction { get; set; } = MessageReaction.None;
+        public Guid ConversationId { get; set; }
     }
 }

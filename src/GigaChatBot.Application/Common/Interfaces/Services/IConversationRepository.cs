@@ -1,4 +1,4 @@
-﻿using GigaChatBot.Domain.Entities;
+﻿using GigaChatBot.Domain.Enums;
 
 namespace GigaChatBot.Application.Common.Interfaces.Services
 {
@@ -7,7 +7,7 @@ namespace GigaChatBot.Application.Common.Interfaces.Services
         Task<Domain.Entities.Conversation> GetTestConversationAsync();
         Task<Domain.Entities.Conversation> CreateConversationAsync();
         Task<Domain.Entities.Conversation?> GetConversationAsync(Guid conversationId);
-        Task UpdateConversation(Domain.Entities.Conversation conversation);
-        Task SaveMessageAsync(Message message);
+        Task AddMessageAsync(Domain.Entities.Message message);
+        Task ReactToMessageAsync(MessageReaction reaction, int messageId);
     }
 }

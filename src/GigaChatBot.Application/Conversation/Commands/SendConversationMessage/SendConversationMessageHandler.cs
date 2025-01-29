@@ -9,7 +9,7 @@ namespace GigaChatBot.Application.Conversation.Commands.SendConversationMessage
 
         public SendConversationMessageHandler(IChatBotService chatBotService)
         {
-            this._chatBotService = chatBotService;
+            _chatBotService = chatBotService;
         }
 
         public async Task Handle(SendConversationMessageCommand request, CancellationToken cancellationToken)

@@ -1,6 +1,6 @@
 ﻿namespace GigaChatBot.Domain.Enums
 {
-    public enum MessageUserReaction
+    public enum MessageReaction
     {
         None,
         Like,

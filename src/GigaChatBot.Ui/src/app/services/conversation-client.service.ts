@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { Observable } from 'rxjs';
-import { IConversation } from '../models/conversation.model';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { IConversation, MessageReaction } from '../models/conversation.model';
 import * as signalR from '@microsoft/signalr';
 
 @Injectable({
@@ -10,7 +10,9 @@ import * as signalR from '@microsoft/signalr';
 export class ConversationClientService {
   private readonly _apiUrl = `https://localhost:7044`;
   private readonly _conversationEndpoint = `${this._apiUrl}/conversation`;
+  private readonly _messageEndpoint = `${this._apiUrl}/message`;
   private hubConnection!: signalR.HubConnection;
+  private cancelResponseGenerationSubject = new Subject<void>();
 
   currentResponse = signal<string | null>(null);
 
@@ -42,9 +44,27 @@ export class ConversationClientService {
   }
 
   sendMessage(conversationId: string, message: string): Observable<void> {
-    return this.http.post<void>(
-      `${this._conversationEndpoint}/${conversationId}/message`,
-      { conversationId: conversationId, content: message }
-    );
+    this.cancelResponseGenerationSubject = new Subject<void>();
+    return this.http
+      .post<void>(`${this._conversationEndpoint}/${conversationId}/message`, {
+        conversationId: conversationId,
+        content: message,
+      })
+      .pipe(takeUntil(this.cancelResponseGenerationSubject));
+  }
+
+  cancelResponseGeneration(): void {
+    this.cancelResponseGenerationSubject.next();
+    this.cancelResponseGenerationSubject.complete();
+  }
+
+  reactToMessage(
+    messageId: number,
+    reaction: MessageReaction
+  ): Observable<void> {
+    return this.http.post<void>(`${this._messageEndpoint}/${messageId}/react`, {
+      messageId,
+      reaction,
+    });
   }
 }

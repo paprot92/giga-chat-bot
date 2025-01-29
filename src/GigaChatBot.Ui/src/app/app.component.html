@@ -3,18 +3,46 @@
 </header>
 <main>
   @let conversation = conversationDetails(); @if(conversation) {
-  <div class="conversation-container" #conversationContainer>
+  <section class="conversation-container" #conversationContainer>
     <header>
       <h2>Test Conversation</h2>
       <div class="conversation-id">{{ conversation.id }}</div>
     </header>
-    <section class="messages-section">
+    <div class="messages-container">
       @for (message of conversation.messages; track $index) {
       <div
         *ngIf="message.type == MessageType.Assistant"
         class="message assistant"
       >
         <p>{{ message.content }}</p>
+        <div class="message-actions">
+          <button
+            [class.active]="message.reaction == MessageReaction.Like"
+            (click)="
+              reactToMessage(
+                message.id,
+                message.reaction == MessageReaction.Like
+                  ? MessageReaction.None
+                  : MessageReaction.Like
+              )
+            "
+          >
+            like
+          </button>
+          <button
+            [class.active]="message.reaction == MessageReaction.Dislike"
+            (click)="
+              reactToMessage(
+                message.id,
+                message.reaction == MessageReaction.Dislike
+                  ? MessageReaction.None
+                  : MessageReaction.Dislike
+              )
+            "
+          >
+            dislike
+          </button>
+        </div>
       </div>
       <div *ngIf="message.type == MessageType.User" class="message user">
         <p>{{ message.content }}</p>
@@ -32,14 +60,20 @@
         </p>
       </div>
       }
-    </section>
-  </div>
+    </div>
+  </section>
   <section class="input-section">
     <input
       [formControl]="inputFormControl"
       placeholder="Ask anything.."
       (keypress)="onKeyPress(conversation.id, $event)"
     />
+    <button
+      [hidden]="!inputFormControl.disabled"
+      (click)="cancelResponseGeneration()"
+    >
+      cancel
+    </button>
   </section>
   }
 </main>

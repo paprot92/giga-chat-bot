@@ -44,7 +44,7 @@
         }
       }
 
-      .messages-section {
+      .messages-container {
         display: flex;
         flex-direction: column;
         gap: 32px;
@@ -52,10 +52,13 @@
         max-width: 1024px;
 
         .message {
+          display: flex;
+          flex-direction: column;
           max-width: 90%;
           padding: 12px 24px;
           color: #fff;
           border-radius: 8px;
+          gap: 8px;
 
           &.user {
             background-color: #1e88e5;
@@ -73,6 +76,17 @@
             text-align: left;
             word-wrap: break-word;
             word-break: break-all;
+          }
+
+          .message-actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            gap: 8px;
+
+            button.active {
+              font-weight: bold;
+            }
           }
         }
       }

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System;
+using GigaChatBot.Application.Message.Commands.ReactToMessage;
 
 internal class Program
 {
@@ -23,13 +24,6 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddSignalR();
-        //builder.Services.Configure<JsonOptions>(options =>
-        //{
-        //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        //    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        //    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-        //});
-
         builder.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
@@ -74,6 +68,20 @@ internal class Program
             CancellationToken cancellationToken) =>
         {
             if (command.ConversationId != id)
+            {
+                return Results.BadRequest();
+            }
+            await mediator.Send(command, cancellationToken);
+            return Results.Ok();
+        });
+
+        app.MapPost("/message/{id}/react", async (
+            [FromRoute] int id,
+            [FromBody] ReactToMessageCommand command,
+            [FromServices] IMediator mediator,
+            CancellationToken cancellationToken) =>
+        {
+            if (command.MessageId != id)
             {
                 return Results.BadRequest();
             }

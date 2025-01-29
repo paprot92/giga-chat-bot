@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   effect,
   ElementRef,
@@ -11,9 +10,13 @@ import {
 } from '@angular/core';
 import { ConversationClientService } from './services/conversation-client.service';
 import { CommonModule } from '@angular/common';
-import { IConversation, MessageType } from './models/conversation.model';
+import {
+  IConversation,
+  MessageType,
+  MessageReaction,
+} from './models/conversation.model';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { first, tap } from 'rxjs';
+import { finalize, first, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -24,11 +27,11 @@ import { first, tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  private _cd = inject(ChangeDetectorRef);
   private _conversationClient = inject(ConversationClientService);
   @ViewChild('conversationContainer')
   private conversationContainer!: ElementRef;
   protected MessageType = MessageType;
+  protected MessageReaction = MessageReaction;
   protected conversationDetails = signal<IConversation | null>(null);
   protected currentQuestion = signal<string | null>(null);
   protected currentResponse = this._conversationClient.currentResponse;
@@ -61,13 +64,25 @@ export class AppComponent implements OnInit {
       this._conversationClient
         .sendMessage(conversationId, this.inputFormControl.value)
         .pipe(
-          tap(() => {
-            this.reloadConversation();
+          first(),
+          finalize(() => {
+            setTimeout(() => this.reloadConversation(), 500);
           })
         )
         .subscribe();
       this.inputFormControl.reset();
     }
+  }
+
+  protected cancelResponseGeneration(): void {
+    this._conversationClient.cancelResponseGeneration();
+  }
+
+  protected reactToMessage(messageId: number, reaction: MessageReaction): void {
+    this._conversationClient
+      .reactToMessage(messageId, reaction)
+      .pipe(tap(() => this.reloadConversation()))
+      .subscribe();
   }
 
   private reloadConversation(): void {
