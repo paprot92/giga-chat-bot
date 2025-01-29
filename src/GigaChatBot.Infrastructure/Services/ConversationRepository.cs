@@ -44,7 +44,7 @@ namespace GigaChatBot.Infrastructure.Services
                 .FirstOrDefaultAsync(c => c.Id == conversationId);
         }
 
-        public async Task ReactToMessageAsync(MessageReaction reaction, int messageId)
+        public async Task ReactToMessageAsync(MessageReaction reaction, Guid messageId)
         {
             var message = await _context.Messages.FirstOrDefaultAsync(m => m.Id == messageId);
             if (message is null)

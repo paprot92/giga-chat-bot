@@ -1,20 +1,13 @@
-using Azure.Core;
 using GigaChatBot.Api.Hubs;
 using GigaChatBot.Api.Services;
 using GigaChatBot.Application;
 using GigaChatBot.Application.Common.Interfaces.Services;
 using GigaChatBot.Application.Conversation.Commands.SendConversationMessage;
 using GigaChatBot.Application.Conversation.Queries.GetTestConversationDetails;
-using GigaChatBot.Domain.Entities;
 using GigaChatBot.Infrastructure;
 using GigaChatBot.Persistence;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using System;
 using GigaChatBot.Application.Message.Commands.ReactToMessage;
 
 internal class Program
@@ -76,7 +69,7 @@ internal class Program
         });
 
         app.MapPost("/message/{id}/react", async (
-            [FromRoute] int id,
+            [FromRoute] Guid id,
             [FromBody] ReactToMessageCommand command,
             [FromServices] IMediator mediator,
             CancellationToken cancellationToken) =>

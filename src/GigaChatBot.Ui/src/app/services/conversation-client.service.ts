@@ -59,7 +59,7 @@ export class ConversationClientService {
   }
 
   reactToMessage(
-    messageId: number,
+    messageId: string,
     reaction: MessageReaction
   ): Observable<void> {
     return this.http.post<void>(`${this._messageEndpoint}/${messageId}/react`, {

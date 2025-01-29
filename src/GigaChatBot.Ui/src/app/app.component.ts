@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
     this._conversationClient.cancelResponseGeneration();
   }
 
-  protected reactToMessage(messageId: number, reaction: MessageReaction): void {
+  protected reactToMessage(messageId: string, reaction: MessageReaction): void {
     this._conversationClient
       .reactToMessage(messageId, reaction)
       .pipe(tap(() => this.reloadConversation()))

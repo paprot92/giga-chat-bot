@@ -35,17 +35,15 @@ namespace GigaChatBot.Persistence.Migrations
 
             modelBuilder.Entity("GigaChatBot.Domain.Entities.Message", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ConversationId")
+                    b.Property<Guid>("ConversationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
@@ -66,9 +64,13 @@ namespace GigaChatBot.Persistence.Migrations
 
             modelBuilder.Entity("GigaChatBot.Domain.Entities.Message", b =>
                 {
-                    b.HasOne("GigaChatBot.Domain.Entities.Conversation", null)
+                    b.HasOne("GigaChatBot.Domain.Entities.Conversation", "Conversation")
                         .WithMany("Messages")
-                        .HasForeignKey("ConversationId");
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
                 });
 
             modelBuilder.Entity("GigaChatBot.Domain.Entities.Conversation", b =>

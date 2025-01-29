@@ -4,7 +4,7 @@ export interface IConversation {
 }
 
 export interface IMessage {
-  id: number;
+  id: string;
   content: string;
   createdOn: Date;
   type: MessageType;
