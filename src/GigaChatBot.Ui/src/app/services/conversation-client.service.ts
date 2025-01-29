@@ -8,6 +8,7 @@ import * as signalR from '@microsoft/signalr';
   providedIn: 'root',
 })
 export class ConversationClientService {
+  // todo: refactor; separate state service (optimize reloads) and api client service;
   private readonly _apiUrl = `https://localhost:7044`;
   private readonly _conversationEndpoint = `${this._apiUrl}/conversation`;
   private readonly _messageEndpoint = `${this._apiUrl}/message`;

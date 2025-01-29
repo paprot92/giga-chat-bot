@@ -5,8 +5,9 @@
   width: 100%;
   height: 100vh;
 
-  header {
+  .topbar {
     padding: 0 1em;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
   }
 
   main {
@@ -26,11 +27,15 @@
       flex-grow: 1;
       gap: 32px;
       width: 100%;
+      padding-bottom: 12px;
       overflow-y: scroll;
+      border-bottom: 1px solid #333;
 
       header {
         width: 100%;
         max-width: 1024px;
+        padding: 1em;
+
         h2,
         .conversation-id {
           color: hsl(0, 5%, 0%);
@@ -67,7 +72,7 @@
           }
 
           &.assistant {
-            background-color: #333333;
+            background-color: #333;
             align-self: flex-start;
           }
 
@@ -110,19 +115,19 @@
       gap: 8px;
       width: 100%;
       max-width: 1024px;
-      padding: 32px 0;
+      padding: 24px 0;
 
       input {
         width: 100%;
         height: 4rem;
         padding: 1rem;
         border-radius: 8px;
-        border: 1px solid black;
+        border: 1px solid #333;
       }
 
       button {
         border-radius: 8px;
-        border: 1px solid black;
+        border: 1px solid #333;
       }
     }
   }
