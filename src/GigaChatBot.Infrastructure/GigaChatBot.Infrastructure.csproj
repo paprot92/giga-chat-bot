@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\GigaChatBot.Application\GigaChatBot.Application.csproj" />
     <ProjectReference Include="..\GigaChatBot.Domain\GigaChatBot.Domain.csproj" />
     <ProjectReference Include="..\GigaChatBot.Persistence\GigaChatBot.Persistence.csproj" />
   </ItemGroup>

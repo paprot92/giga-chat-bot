@@ -2,7 +2,8 @@
 {
     public enum MessageType
     {
+        System,
         User,
-        Bot
+        Assistant
     }
 }
