@@ -4,9 +4,10 @@ namespace GigaChatBot.Application.Common.Interfaces.Services
 {
     public interface IConversationRepository
     {
-        Task<Conversation> CreateConversationAsync();
-        Task<Conversation?> GetConversationAsync(Guid conversationId);
-        Task UpdateConversation(Conversation conversation);
+        Task<Domain.Entities.Conversation> GetTestConversationAsync();
+        Task<Domain.Entities.Conversation> CreateConversationAsync();
+        Task<Domain.Entities.Conversation?> GetConversationAsync(Guid conversationId);
+        Task UpdateConversation(Domain.Entities.Conversation conversation);
         Task SaveMessageAsync(Message message);
     }
 }

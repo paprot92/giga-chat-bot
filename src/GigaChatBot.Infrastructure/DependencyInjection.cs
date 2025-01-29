@@ -8,7 +8,7 @@ namespace GigaChatBot.Infrastructure
 	{
 		public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-			services.AddSingleton<IChatBotService, LoremChatBotService>();
+			services.AddScoped<IChatBotService, LoremChatBotService>();
 			services.AddScoped<IConversationRepository, ConversationRepository>();
             return services;
 		}

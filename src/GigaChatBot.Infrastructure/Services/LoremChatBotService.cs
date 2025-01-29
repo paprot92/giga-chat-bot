@@ -30,21 +30,28 @@ namespace GigaChatBot.Infrastructure.Services
                 throw new Exception("Conversation not found.");
             }
 
+            conversation.Messages.Add(new Message { Content = message, CreatedOn = DateTime.Now, Type = Domain.Enums.MessageType.User });
+
             var responseStream = GetMessageResponseStreamAsync(message, cancellationToken);
             var responseBuilder = new StringBuilder();
-            await foreach (var chunk in responseStream.WithCancellation(cancellationToken))
+            try
             {
-                if (cancellationToken.IsCancellationRequested)
+                await foreach (var chunk in responseStream.WithCancellation(cancellationToken))
                 {
-                    break;
+                    // todo: send chunk to signalR hub
+                    responseBuilder.Append(' ').Append(chunk);
                 }
-
-                // todo: send chunk to signalR hub
-                responseBuilder.Append(chunk);
             }
-
-            conversation.Messages.Add(new Message { Content = responseBuilder.ToString(), CreatedOn = DateTime.Now });
-            await _conversationRepository.UpdateConversation(conversation);
+            catch (OperationCanceledException) { }
+            catch (Exception) {
+                responseBuilder.Clear();
+                responseBuilder.Append("An error occurred during generation. Try again.");
+            }
+            finally
+            {
+                conversation.Messages.Add(new Message { Content = responseBuilder.ToString(), CreatedOn = DateTime.Now, Type = Domain.Enums.MessageType.Assistant });
+                await _conversationRepository.UpdateConversation(conversation);
+            }
         }
 
         public async IAsyncEnumerable<string> GetMessageResponseStreamAsync(string userMessage, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -60,7 +67,7 @@ namespace GigaChatBot.Infrastructure.Services
                 }
 
                 yield return word;
-                await Task.Delay(500, cancellationToken);
+                await Task.Delay(100, cancellationToken);
             }
         }
 

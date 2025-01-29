@@ -22,6 +22,19 @@ namespace GigaChatBot.Infrastructure.Services
             return conversation;
         }
 
+        public async Task<Conversation> GetTestConversationAsync()
+        {
+            var conversation = await _context.Conversations
+                .AsNoTracking()
+                .Include(c => c.Messages)
+                .FirstOrDefaultAsync();
+            if (conversation is null)
+            {
+                return await CreateConversationAsync();
+            }
+            return conversation;
+        }
+
         public async Task<Conversation?> GetConversationAsync(Guid conversationId)
         {
             return await _context.Conversations

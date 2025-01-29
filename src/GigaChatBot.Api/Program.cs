@@ -1,6 +1,13 @@
+using Azure.Core;
 using GigaChatBot.Application;
+using GigaChatBot.Application.Conversation.Commands.SendConversationMessage;
+using GigaChatBot.Application.Conversation.Queries.GetTestConversationDetails;
+using GigaChatBot.Domain.Entities;
 using GigaChatBot.Infrastructure;
 using GigaChatBot.Persistence;
+using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 internal class Program
 {
@@ -26,30 +33,27 @@ internal class Program
 
         app.UseHttpsRedirection();
 
-        var summaries = new[]
+        app.MapGet("/conversation/test", async (
+            [AsParameters] GetTestConversationDetailsQuery query,
+            [FromServices] IMediator mediator) =>
         {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+            return await mediator.Send(query);
+        });
 
-        app.MapGet("/weatherforecast", () =>
+        app.MapPost("/conversation/{id}/message", async (
+            [FromRoute] Guid id,
+            [FromBody] SendConversationMessageCommand command,
+            [FromServices] IMediator mediator,
+            CancellationToken cancellationToken) =>
         {
-            var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-                .ToArray();
-            return forecast;
-        })
-        .WithName("GetWeatherForecast");
+            if (command.ConversationId != id)
+            {
+                return Results.BadRequest();
+            }
+            await mediator.Send(command, cancellationToken);
+            return Results.Ok();
+        });
 
         app.Run();
     }
-}
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
