@@ -1,5 +1,4 @@
-﻿using GigaChatBot.Domain.Entities;
-
+﻿
 namespace GigaChatBot.Application.Common.Interfaces.Services
 {
     public interface IChatBotService

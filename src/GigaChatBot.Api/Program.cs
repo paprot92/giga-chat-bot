@@ -1,11 +1,15 @@
 using Azure.Core;
+using GigaChatBot.Api.Hubs;
+using GigaChatBot.Api.Services;
 using GigaChatBot.Application;
+using GigaChatBot.Application.Common.Interfaces.Services;
 using GigaChatBot.Application.Conversation.Commands.SendConversationMessage;
 using GigaChatBot.Application.Conversation.Queries.GetTestConversationDetails;
 using GigaChatBot.Domain.Entities;
 using GigaChatBot.Infrastructure;
 using GigaChatBot.Persistence;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +18,9 @@ internal class Program
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddSignalR();
+        builder.Services.AddTransient<IConversationNotificationService, ConversationNotificationService>();
 
         builder.Services.AddApplication();
         builder.Services.AddInfrastructure();
@@ -53,6 +60,8 @@ internal class Program
             await mediator.Send(command, cancellationToken);
             return Results.Ok();
         });
+
+        app.MapHub<ConversationHub>("/conversation/hub");
 
         app.Run();
     }

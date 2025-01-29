@@ -16,10 +16,12 @@ namespace GigaChatBot.Infrastructure.Services
     {
         private static readonly Random _random = new();
         private readonly IConversationRepository _conversationRepository;
+        private readonly IConversationNotificationService _notificationService;
 
-        public LoremChatBotService(IConversationRepository conversationRepository)
+        public LoremChatBotService(IConversationRepository conversationRepository, IConversationNotificationService notificationService)
         {
             _conversationRepository = conversationRepository;
+            _notificationService = notificationService;
         }
 
         public async Task SendMessageAsync(Guid conversationId, string message, CancellationToken cancellationToken)
@@ -38,8 +40,8 @@ namespace GigaChatBot.Infrastructure.Services
             {
                 await foreach (var chunk in responseStream.WithCancellation(cancellationToken))
                 {
-                    // todo: send chunk to signalR hub
-                    responseBuilder.Append(' ').Append(chunk);
+                    await _notificationService.SendConversationMessageChunk(conversationId, $" {chunk}");
+                    responseBuilder.Append($" {chunk}");
                 }
             }
             catch (OperationCanceledException) { }
