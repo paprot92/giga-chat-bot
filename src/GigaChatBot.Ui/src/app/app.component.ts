@@ -1,9 +1,13 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  effect,
+  ElementRef,
   inject,
   OnInit,
   signal,
+  ViewChild,
 } from '@angular/core';
 import { ConversationClientService } from './services/conversation-client.service';
 import { CommonModule } from '@angular/common';
@@ -20,12 +24,32 @@ import { first, tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
+  private _cd = inject(ChangeDetectorRef);
   private _conversationClient = inject(ConversationClientService);
+  @ViewChild('conversationContainer')
+  private conversationContainer!: ElementRef;
   protected MessageType = MessageType;
   protected conversationDetails = signal<IConversation | null>(null);
   protected currentQuestion = signal<string | null>(null);
   protected currentResponse = this._conversationClient.currentResponse;
   protected inputFormControl = new FormControl<string | undefined>(undefined);
+
+  constructor() {
+    effect(() => {
+      this.conversationDetails();
+      this.currentQuestion();
+      this.currentResponse();
+      this.scrollToBottom();
+    });
+
+    effect(() => {
+      if (!!this.currentQuestion()?.length && !this.inputFormControl.disabled) {
+        this.inputFormControl.disable();
+      } else if (this.inputFormControl.disabled) {
+        this.inputFormControl.enable();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.reloadConversation();
@@ -55,8 +79,18 @@ export class AppComponent implements OnInit {
         tap(() => {
           this.currentQuestion.set(null);
           this.currentResponse.set(null);
+          this.scrollToBottom();
         })
       )
       .subscribe();
+  }
+
+  private scrollToBottom() {
+    setTimeout(() => {
+      if (this.conversationContainer?.nativeElement != null) {
+        this.conversationContainer.nativeElement.scrollTop =
+          this.conversationContainer.nativeElement.scrollHeight;
+      }
+    }, 200);
   }
 }

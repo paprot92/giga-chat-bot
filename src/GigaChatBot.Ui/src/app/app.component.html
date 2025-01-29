@@ -1,34 +1,43 @@
+<header>
+  <h1>Giga Chat Bot</h1>
+</header>
 <main>
   @let conversation = conversationDetails(); @if(conversation) {
-  <h1>Conversation {{ conversation.id }}</h1>
-  <section class="messages-section">
-    @for (message of conversation.messages; track $index) {
-    <div
-      *ngIf="message.type == MessageType.Assistant"
-      class="message assistant"
-    >
-      <p>{{ message.content }}</p>
-    </div>
-    <div *ngIf="message.type == MessageType.User" class="message user">
-      <p>{{ message.content }}</p>
-    </div>
-    } @if (currentQuestion() != null && currentQuestion()!.length > 0) {
-    <div class="message user">
-      <p>
-        {{ currentQuestion() }}
-      </p>
-    </div>
-    } @if (currentResponse() != null && currentResponse()!.length > 0) {
-    <div class="message assistant">
-      <p>
-        {{ currentResponse() }}
-      </p>
-    </div>
-    }
-  </section>
+  <div class="conversation-container" #conversationContainer>
+    <header>
+      <h2>Test Conversation</h2>
+      <div class="conversation-id">{{ conversation.id }}</div>
+    </header>
+    <section class="messages-section">
+      @for (message of conversation.messages; track $index) {
+      <div
+        *ngIf="message.type == MessageType.Assistant"
+        class="message assistant"
+      >
+        <p>{{ message.content }}</p>
+      </div>
+      <div *ngIf="message.type == MessageType.User" class="message user">
+        <p>{{ message.content }}</p>
+      </div>
+      } @if (currentQuestion() != null && currentQuestion()!.length > 0) {
+      <div class="message user">
+        <p>
+          {{ currentQuestion() }}
+        </p>
+      </div>
+      } @if (currentResponse() != null && currentResponse()!.length > 0) {
+      <div class="message assistant">
+        <p>
+          {{ currentResponse() }}
+        </p>
+      </div>
+      }
+    </section>
+  </div>
   <section class="input-section">
     <input
       [formControl]="inputFormControl"
+      placeholder="Ask anything.."
       (keypress)="onKeyPress(conversation.id, $event)"
     />
   </section>
