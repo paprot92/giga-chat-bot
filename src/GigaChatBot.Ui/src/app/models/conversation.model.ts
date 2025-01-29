@@ -1,0 +1,24 @@
+export interface IConversation {
+  id: string;
+  messages: IMessage[];
+}
+
+export interface IMessage {
+  id: number;
+  content: string;
+  createdOn: Date;
+  type: MessageType;
+  reaction: MessageUserReaction;
+}
+
+export enum MessageType {
+  System,
+  User,
+  Assistant,
+}
+
+export enum MessageUserReaction {
+  None,
+  Like,
+  Dislike,
+}

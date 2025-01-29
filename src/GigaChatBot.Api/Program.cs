@@ -12,6 +12,9 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using System;
 
 internal class Program
 {
@@ -20,6 +23,23 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddSignalR();
+        //builder.Services.Configure<JsonOptions>(options =>
+        //{
+        //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        //    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        //    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+        //});
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.SetIsOriginAllowed(_ => true);
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+                builder.AllowCredentials();
+            });
+        });
         builder.Services.AddTransient<IConversationNotificationService, ConversationNotificationService>();
 
         builder.Services.AddApplication();
@@ -63,6 +83,7 @@ internal class Program
 
         app.MapHub<ConversationHub>("/conversation/hub");
 
+        app.UseCors();
         app.Run();
     }
 }
